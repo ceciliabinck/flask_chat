@@ -18,7 +18,7 @@ def add_messages(username, message):
     messages.append(messages_dict)
 
 
-@app.route('/', methods = ["GET", "POST"])
+@app.route('/', methods=["GET", "POST"])
 def index():
     """Main page with instructions"""
 
@@ -32,9 +32,16 @@ def index():
     
 
 
-@app.route("/<username>")
+@app.route("/<username>", methods=["GET", "POST"])
 def user(username):
     """Display chat messages"""
+
+    if request.method == "POST":
+        username = session["username"]
+        message = request.form["message"]
+        add_messages(username, message)
+        return redirect(session["username"])
+
     return render_template("chat.html", username=username, chat_messages=messages)
 
 
